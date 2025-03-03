@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money_monastery/src/features/home/presentation/pages/login_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/pages/signup_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -28,11 +30,15 @@ class LandingScreen extends StatelessWidget {
               ),
           
               //const Spacer(),
-              CustomButton(title: 'Sign up', onPressed: () {},
+              CustomButton(title: 'Sign Up', onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+              },
               backgroundColor: Colors.black,
               textColor: Colors.white,),
               const SizedBox(height: 15,),
-              CustomButton(title: 'Login', onPressed: () {}),
+              CustomButton(title: 'Login', onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              }),
               const SizedBox(height: 50,)
             ],
           ),
