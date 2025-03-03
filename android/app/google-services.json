@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "151408355027",
+    "project_id": "moneymonastery-57451",
+    "storage_bucket": "moneymonastery-57451.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151408355027:android:40b2a7b637929fb89b1626",
+        "android_client_info": {
+          "package_name": "com.example.money_monastery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAUWqKK9KhCTNYP4ckZF9JrGgzd_FMRpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
