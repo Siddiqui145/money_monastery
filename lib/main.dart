@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/pages/landing_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/auth/landing_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const LandingScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

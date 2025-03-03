@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/pages/login_screen.dart';
-import 'package:money_monastery/src/features/home/presentation/pages/signup_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/auth/login_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/auth/signup_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 
 class LandingScreen extends StatelessWidget {
