@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monastery/src/features/home/presentation/auth/landing_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
@@ -10,10 +11,7 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  @override
-  Widget build(BuildContext context) {
-
+  
     final TextEditingController nameController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
@@ -22,6 +20,23 @@ class _SignupScreenState extends State<SignupScreen> {
     final TextEditingController genderController = TextEditingController();
     final TextEditingController cityController = TextEditingController();
     final TextEditingController incomeController = TextEditingController();
+
+      Future<void> createUserWithEmailAndPassword() async {
+    final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailController.text.trim(), 
+      password: passwordController.text.trim());
+      print(userCredential);
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    
+  }
+class _SignupScreenState extends State<SignupScreen> {
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
       body: Padding(padding: EdgeInsets.all(16),
@@ -56,7 +71,8 @@ class _SignupScreenState extends State<SignupScreen> {
             CustomTextfield(title: 'Annual Income', controller: incomeController),
 
             const SizedBox(height: 20,),
-            CustomButton(title: 'Sign Up', onPressed: () {
+            CustomButton(title: 'Sign Up', onPressed: () async {
+                await createUserWithEmailAndPassword();
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingScreen()));
               },
               backgroundColor: Colors.black,
