@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/landing_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/screens/landing_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
