@@ -6,13 +6,15 @@ class CustomTextfield extends StatelessWidget {
     required this.title,
     required this.controller,
     this.hintText,
-    this.obscureText = false
+    this.obscureText = false,
+    this.isPassword = false
     });
 
     final String title;
     final TextEditingController controller;
     final String? hintText;
     final bool obscureText;
+    final bool isPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class CustomTextfield extends StatelessWidget {
       width: double.infinity,
       child: TextField(
         controller: controller,
-        obscureText: obscureText,
+        obscureText: isPassword,
         decoration: InputDecoration(
           hintText: title,
           hintStyle: Theme.of(context).textTheme.titleMedium,

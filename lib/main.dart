@@ -4,8 +4,8 @@ import 'package:money_monastery/src/features/home/presentation/auth/landing_scre
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
   await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
