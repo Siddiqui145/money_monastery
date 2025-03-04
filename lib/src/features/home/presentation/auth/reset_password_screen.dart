@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/landing_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/screens/landing_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
 
