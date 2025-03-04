@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monastery/src/features/home/presentation/auth/reset_password_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/screens/qnda_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
 
@@ -11,7 +12,9 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-    final TextEditingController emailController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+
+  final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
     Future<void> loginWithEmailAndPassword() async {
@@ -20,17 +23,15 @@ class LoginScreen extends StatefulWidget {
           email: emailController.text.trim(), 
           password: passwordController.text.trim());
           print(userCredential);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QndaScreen()));
       } on FirebaseAuthException
       catch(e) {
         print(e.message);
       }
     }
 
-class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-
-    
 
     return Scaffold(
       body: Padding(padding: EdgeInsets.all(16),
