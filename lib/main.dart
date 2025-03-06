@@ -1,6 +1,8 @@
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monastery/src/features/home/presentation/screens/landing_screen.dart';
+//import 'package:money_monastery/src/features/home/presentation/screens/qnda_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const LandingScreen(),
+      home: 
+      // FirebaseAuth.instance.currentUser!= null 
+      // ? const QndaScreen() 
+      // : const LandingScreen(),
+      const LandingScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

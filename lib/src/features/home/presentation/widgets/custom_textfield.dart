@@ -10,8 +10,8 @@ class CustomTextfield extends StatelessWidget {
     this.obscureText = false,
     this.isPassword = false,
     this.keyboardType,
-    this.validator,
-    this.inputFormatters,
+    this.validator, //For validation like regular experssions
+    this.inputFormatters, //For Limiting number of digits in mobile numbers
     });
 
     final String title;

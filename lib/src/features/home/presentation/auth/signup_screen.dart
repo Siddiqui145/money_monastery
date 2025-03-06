@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monastery/src/features/home/presentation/screens/landing_screen.dart';
+import 'package:money_monastery/src/features/home/presentation/auth/email_verification_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
+import 'package:money_monastery/src/features/home/presentation/widgets/drop_down.dart';
+import 'package:money_monastery/src/features/home/presentation/widgets/widgets.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -16,7 +18,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController nameController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController mobileController = TextEditingController();
@@ -54,25 +56,29 @@ class _SignupScreenState extends State<SignupScreen> {
       );
       return;
     }
+    
         try {
-            final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,);
-      print("User created: ${userCredential.user?.uid}");
 
+      if (context.mounted){
+      Navigator.pop(context);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LandingScreen()),
+        MaterialPageRoute(builder: (context) => EmailVerificationScreen()),
       );
+      }
     }
      on FirebaseAuthException catch(e) {
-      print("Firebase Auth Error: ${e.code} - ${e.message}");
-      ScaffoldMessenger.of(context).showSnackBar(
+      if(context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.message}")),
       );
       }
+      }
       catch(e) {
-        print("Unexpected Error : $e");
+        //print("Unexpected Error : $e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Unexpected Error occured'))
         );
@@ -171,11 +177,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 if (value == null || value.trim().isEmpty) {
                   return "Date of Birth cannot be Empty";
                 }
+                RegExp dobRegex = RegExp(r'^\d{2}-\d{2}-\d{4}$');
+                if (!dobRegex.hasMatch(value)) {
+                return "Enter valid format: DD-MM-YYYY";
+                }
                 return null;
-              },),
+              },
+              inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(8),
+              DateFormatter()
+              ],),
           
               const SizedBox(height: 20,),
-              CustomTextfield(title: 'Gender', controller: genderController),
+              //CustomTextfield(title: 'Gender', controller: genderController),
+              Dropdown(title: "Select Gender", items: ["Male", "Female"], controller: genderController),
           
               const SizedBox(height: 20,),
               CustomTextfield(title: 'Current City of Residence', controller: cityController, keyboardType: TextInputType.name,
