@@ -19,14 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Future<void> loginWithEmailAndPassword() async {
       try{
-        final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(), 
           password: passwordController.text.trim());
-          print(userCredential);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Logged in Successfully!")));
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QndaScreen()));
       } on FirebaseAuthException
       catch(e) {
-        print(e.message);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
 
