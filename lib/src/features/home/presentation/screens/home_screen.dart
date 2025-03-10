@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monastery/src/features/home/data/network/router/app_router.gr.dart';
+import 'package:money_monastery/src/features/home/presentation/widgets/bottom_bar_item.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -13,9 +14,8 @@ class HomeScreen extends StatelessWidget {
         ChallengesRoute(),
         QndaRoute(),
         LearnRoute(),
-        ProfileRoute()
+        ProfileRoute(),
       ],
-
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
 
@@ -23,16 +23,32 @@ class HomeScreen extends StatelessWidget {
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
+            selectedFontSize: 0,
+            unselectedFontSize: 0,
+            backgroundColor: Colors.grey.shade400, 
             currentIndex: tabsRouter.activeIndex,
             onTap: tabsRouter.setActiveIndex,
-            selectedItemColor: Color.fromRGBO(235, 237, 240, 1),
-            unselectedItemColor: Color.fromRGBO(217, 217, 217, 1),
+            selectedItemColor: Colors.black, 
+            unselectedItemColor: Colors.grey.shade700, 
             items: [
-              BottomNavigationBarItem(icon: Image.asset("assets/images/challenges.png"), label: ""),
-              BottomNavigationBarItem(icon: Image.asset("assets/images/questions.png"), label: ""),
-              BottomNavigationBarItem(icon: Image.asset("assets/images/learning.png"), label: ""),
-              BottomNavigationBarItem(icon: Image.asset("assets/images/profile.png"), label: ""),
-          ]),
+              BottomNavigationBarItem(
+                icon: buildFullBox("assets/images/challenges.png", 0, tabsRouter),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: buildFullBox("assets/images/questions.png", 1, tabsRouter),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: buildFullBox("assets/images/learning.png", 2, tabsRouter),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: buildFullBox("assets/images/profile.png", 3, tabsRouter),
+                label: "",
+              ),
+            ],
+          ),
         );
       },
     );
