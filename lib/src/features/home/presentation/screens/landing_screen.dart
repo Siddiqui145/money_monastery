@@ -1,8 +1,10 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:money_monastery/src/features/home/presentation/auth/login_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/auth/signup_screen.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 
+@RoutePage()
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
