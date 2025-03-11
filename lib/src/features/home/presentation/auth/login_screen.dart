@@ -1,10 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/reset_password_screen.dart';
-import 'package:money_monastery/src/features/home/presentation/screens/qnda_screen.dart';
+import 'package:money_monastery/src/features/home/data/network/router/app_router.gr.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
 
+@RoutePage()
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -22,8 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(), 
           password: passwordController.text.trim());
+
+          if (!mounted) return;
+          
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Logged in Successfully!")));
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QndaScreen()));
+          context.router.replace(const HomeRoute());
       } on FirebaseAuthException
       catch(e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -51,12 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 45,),
               CustomButton(title: 'Login', onPressed: () async {
                 await loginWithEmailAndPassword();
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
               }),
             
              const SizedBox(height: 20,),
              CustomButton(title: 'Reset Password', onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordScreen()));
+                context.router.push(const ResetPasswordRoute());
               },
               backgroundColor: Colors.black,
               textColor: Colors.white,),

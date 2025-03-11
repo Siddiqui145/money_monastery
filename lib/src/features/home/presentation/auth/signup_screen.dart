@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/login_screen.dart';
+import 'package:money_monastery/src/features/home/data/network/router/app_router.gr.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/drop_down.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/widgets.dart';
 
+@RoutePage()
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -16,7 +18,10 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends State<SignupScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _formKey = GlobalKey<FormState>();
   bool isEmailVerified = false;
   Timer? timer;
@@ -37,19 +42,23 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void startEmailVerificationCheck() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null || user.emailVerified) return;
+    
     timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
       await FirebaseAuth.instance.currentUser?.reload();
+
       if (FirebaseAuth.instance.currentUser?.emailVerified ?? false) {
         timer.cancel();
         setState(() {
           isEmailVerified = true;
         });
-
-        if (context.mounted) {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email Verified Successfully')),
           );
-        }
+        
       }
     });
   }
@@ -70,6 +79,9 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Verification email sent! Please check your inbox.")),
       );
@@ -106,7 +118,10 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       await FirebaseAuth.instance.currentUser?.updatePassword(password);
       await uploadUserToDb();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+
+      if (!mounted) return;
+
+      context.router.replace(const LoginRoute());
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.message}")),
@@ -126,6 +141,8 @@ class _SignupScreenState extends State<SignupScreen> {
           "city": cityController.text.trim(),
           "income": incomeController.text.trim(),
         });
+
+        if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("User Data Uploaded Successfully!")),
@@ -154,142 +171,151 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
+            child:  Column(
               children: [
-                const SizedBox(height: 35),
-                Text(
-                  "You're one step closer to Financial Nirvana!",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextfield(
-                  title: 'Name',
-                  controller: nameController,
-                  keyboardType: TextInputType.name,
-                  validator: (value) => value!.trim().isEmpty ? "Name cannot be Empty" : null,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextfield(
-                  title: 'Password',
-                  controller: passwordController,
-                  isPassword: true,
-                  validator: (value) => value!.length < 6 ? "Password must be at least 6 characters" : null,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextfield(
-                  title: 'Email ID',
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value!.trim().isEmpty) return "Email cannot be empty";
-                    if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(value)) {
-                      return "Enter a valid email";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-
-                CustomButton(
-                  title: 'Verify Email',
-                  textColor: Colors.white,
-                  onPressed: sendEmailVerificationLink,
-                  backgroundColor: Colors.black,
-                  width: 140,
-                  radius: 40,
-                ),
-
-                if (isEmailVerified)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text(
-                      "Email Verified! Now proceed.",
-                      style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 35),
+                              Text(
+                                "You're one step closer to Financial Nirvana!",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 20),
+                                    
+                              CustomTextfield(
+                                title: 'Name',
+                                controller: nameController,
+                                keyboardType: TextInputType.name,
+                                validator: (value) => value!.trim().isEmpty ? "Name cannot be Empty" : null,
+                              ),
+                              const SizedBox(height: 20),
+                                    
+                              CustomTextfield(
+                                title: 'Password',
+                                controller: passwordController,
+                                isPassword: true,
+                                validator: (value) => value!.length < 6 ? "Password must be at least 6 characters" : null,
+                              ),
+                              const SizedBox(height: 20),
+                                    
+                              CustomTextfield(
+                                title: 'Email ID',
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  if (value!.trim().isEmpty) return "Email cannot be empty";
+                                  if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").hasMatch(value)) {
+                                    return "Enter a valid email";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                                    
+                              CustomButton(
+                                title: 'Verify Email',
+                                textColor: Colors.white,
+                                onPressed: sendEmailVerificationLink,
+                                backgroundColor: Colors.black,
+                                width: 140,
+                                radius: 40,
+                              ),
+                                    
+                              if (isEmailVerified)
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    "Email Verified! Now proceed.",
+                                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                    
+                              const SizedBox(height: 20),
+                                    
+                              CustomTextfield(title: 'Mobile Number', controller: mobileController, keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Mobile cannot be empty";
+                                }
+                                if (!RegExp(r"^[6789]\d{9}$").hasMatch(value)) {
+                                  return "Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9";
+                                }
+                                if (value.length != 10) {
+                                  return "Enter a valid 10-digit mobile number";
+                                }
+                                return null;
+                              },),
+                        
+                            const SizedBox(height: 20,),
+                            CustomTextfield(title: 'Date of Birth (DD-MM-YYYY)', controller: dobController, keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Date of Birth cannot be Empty";
+                              }
+                              RegExp dobRegex = RegExp(r'^\d{2}-\d{2}-\d{4}$');
+                              if (!dobRegex.hasMatch(value)) {
+                              return "Enter valid format: DD-MM-YYYY";
+                              }
+                              return null;
+                            },
+                            inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(8),
+                            DateFormatter()
+                            ],),
+                        
+                            const SizedBox(height: 20,),
+                            //CustomTextfield(title: 'Gender', controller: genderController),
+                            Dropdown(title: "Select Gender", items: ["Male", "Female"], controller: genderController),
+                        
+                            const SizedBox(height: 20,),
+                            CustomTextfield(title: 'Current City of Residence', controller: cityController, keyboardType: TextInputType.name,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "City cannot be Empty";
+                              }
+                              return null;
+                            },),
+                        
+                            const SizedBox(height: 20,),
+                            CustomTextfield(title: 'Annual Income', controller: incomeController, keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Income cannot be Empty";
+                              }
+                              return null;
+                            },),
+                        
+                                    
+                              if (isEmailVerified)
+                                CustomButton(
+                                  title: 'Sign Up',
+                                  onPressed: createUserWithEmailAndPassword,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-
-                const SizedBox(height: 20),
-
-                CustomTextfield(title: 'Mobile Number', controller: mobileController, keyboardType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(10),
-                FilteringTextInputFormatter.digitsOnly
               ],
-              validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Mobile cannot be empty";
-                  }
-                  if (!RegExp(r"^[6789]\d{9}$").hasMatch(value)) {
-                    return "Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9";
-                  }
-                  if (value.length != 10) {
-                    return "Enter a valid 10-digit mobile number";
-                  }
-                  return null;
-                },),
-          
-              const SizedBox(height: 20,),
-              CustomTextfield(title: 'Date of Birth (DD-MM-YYYY)', controller: dobController, keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return "Date of Birth cannot be Empty";
-                }
-                RegExp dobRegex = RegExp(r'^\d{2}-\d{2}-\d{4}$');
-                if (!dobRegex.hasMatch(value)) {
-                return "Enter valid format: DD-MM-YYYY";
-                }
-                return null;
-              },
-              inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(8),
-              DateFormatter()
-              ],),
-          
-              const SizedBox(height: 20,),
-              //CustomTextfield(title: 'Gender', controller: genderController),
-              Dropdown(title: "Select Gender", items: ["Male", "Female"], controller: genderController),
-          
-              const SizedBox(height: 20,),
-              CustomTextfield(title: 'Current City of Residence', controller: cityController, keyboardType: TextInputType.name,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return "City cannot be Empty";
-                }
-                return null;
-              },),
-          
-              const SizedBox(height: 20,),
-              CustomTextfield(title: 'Annual Income', controller: incomeController, keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return "Income cannot be Empty";
-                }
-                return null;
-              },),
-          
-
-                if (isEmailVerified)
-                  CustomButton(
-                    title: 'Sign Up',
-                    onPressed: createUserWithEmailAndPassword,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
                   ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                ),
+              
+            );
+          }
   }
-}

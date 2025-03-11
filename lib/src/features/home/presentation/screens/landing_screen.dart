@@ -1,7 +1,6 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/login_screen.dart';
-import 'package:money_monastery/src/features/home/presentation/auth/signup_screen.dart';
+import 'package:money_monastery/src/features/home/data/network/router/app_router.gr.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 
 @RoutePage()
@@ -33,13 +32,13 @@ class LandingScreen extends StatelessWidget {
           
               //const Spacer(),
               CustomButton(title: 'Sign Up', onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen()));
+                context.router.push(const SignupRoute());
               },
               backgroundColor: Colors.black,
               textColor: Colors.white,),
               const SizedBox(height: 15,),
               CustomButton(title: 'Login', onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                context.router.push(const LoginRoute());
               }),
               const SizedBox(height: 50,)
             ],

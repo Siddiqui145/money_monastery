@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:money_monastery/src/features/home/presentation/screens/landing_screen.dart';
+import 'package:money_monastery/src/features/home/data/network/router/app_router.gr.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_button.dart';
 import 'package:money_monastery/src/features/home/presentation/widgets/custom_textfield.dart';
 
+@RoutePage()
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
 
@@ -24,7 +26,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         
         if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password Reset Link sent Successfully")));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        context.router.replace(const LandingRoute());
       }
       }
       on FirebaseAuthException catch(e) {
