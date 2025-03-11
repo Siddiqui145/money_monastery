@@ -10,16 +10,23 @@ class AppRouter extends $AppRouter {
     AutoRoute(page: HomeRoute.page,
     children: [
         //AutoRoute(page: HomeRoute.page),
-        AutoRoute(page: QndaRoute.page, initial: true),
+        
         AutoRoute(page: ChallengesRoute.page),
         AutoRoute(page: LearnRoute.page),
-        AutoRoute(page: ProfileRoute.page)
+        AutoRoute(page: ProfileRoute.page),
+        AutoRoute(page: QndaRoute.page, initial: true,
+        children: [
+          AutoRoute(page: SearchRoute.page, initial: true),
+          AutoRoute(page: PostQuestionRoute.page)
+        ]),
     ]),
 
     AutoRoute(page: LandingRoute.page, initial: true),
+
     AutoRoute(page: SignupRoute.page),
     AutoRoute(page: LoginRoute.page),
-    AutoRoute(page: ResetPasswordRoute.page)
+    AutoRoute(page: ResetPasswordRoute.page),
+    
     
   ];
 }
