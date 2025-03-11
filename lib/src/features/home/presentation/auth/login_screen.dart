@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomTextfield(title: 'Email ID', controller: emailController),
         
             const SizedBox(height: 20,),
-            CustomTextfield(title: 'Password', controller: passwordController),
+            CustomTextfield(title: 'Password', controller: passwordController, isPassword: true,),
             
             const SizedBox(height: 45,),
               CustomButton(title: 'Login', onPressed: () async {
