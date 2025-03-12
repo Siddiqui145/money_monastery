@@ -33,6 +33,7 @@ class CustomTextfield extends StatelessWidget {
         keyboardType: keyboardType,
         validator: validator,
         inputFormatters: inputFormatters,
+        style: Theme.of(context).textTheme.bodyMedium,
         decoration: InputDecoration(
           hintText: title,
           hintStyle: Theme.of(context).textTheme.titleMedium,

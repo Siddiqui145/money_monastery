@@ -38,35 +38,40 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Padding(padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 35,),
-            Text("You're one step closer to Financial Nirvana!",
-            style: Theme.of(context).textTheme.titleMedium,),
-
-            const SizedBox(height: 20,),
-            CustomTextfield(title: 'Email ID', controller: emailController),
-        
-            const SizedBox(height: 20,),
-            CustomTextfield(title: 'Password', controller: passwordController, isPassword: true,),
-            
-            const SizedBox(height: 45,),
-              CustomButton(title: 'Login', onPressed: () async {
-                await loginWithEmailAndPassword();
-              }),
-            
-             const SizedBox(height: 20,),
-             CustomButton(title: 'Reset Password', onPressed: () {
-                context.router.push(const ResetPasswordRoute());
-              },
-              backgroundColor: Colors.black,
-              textColor: Colors.white,),
+      body: Center(
+        child: Padding(padding: EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //const SizedBox(height: 35,),
+              Text("You're one step closer to Financial Nirvana!",
+              style: Theme.of(context).textTheme.titleMedium,),
+          
+              const SizedBox(height: 20,),
+              CustomTextfield(title: 'Email ID', controller: emailController),
+          
+              const SizedBox(height: 20,),
+              CustomTextfield(title: 'Password', controller: passwordController, isPassword: true,),
               
-          ],
-        ),
-      ),),
+              const SizedBox(height: 45,),
+                CustomButton(title: 'Login',
+                backgroundColor: Colors.green.shade500,
+                textColor: Colors.white,
+                 onPressed: () async {
+                  await loginWithEmailAndPassword();
+                }),
+              
+               const SizedBox(height: 20,),
+               CustomButton(title: 'Reset Password', onPressed: () {
+                  context.router.push(const ResetPasswordRoute());
+                },
+                backgroundColor: Colors.black,
+                textColor: Colors.white,),
+                
+            ],
+          ),
+        ),),
+      ),
     );
   }
 }

@@ -8,7 +8,9 @@ import 'package:money_monastery/src/features/home/presentation/widgets/custom_te
 
 @RoutePage()
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  const SignupScreen({Key? key}) : super(key: const ValueKey('SignupPage'));
+
+  //This forces Flutter to recognize this page as a new instance on resume, preventing layout corruption.
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
