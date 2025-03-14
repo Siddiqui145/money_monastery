@@ -26,6 +26,8 @@ class AppRouter extends $AppRouter {
     
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: ResetPasswordRoute.page),
+    AutoRoute(page: TermsAndConditionsRoute.page),
+    AutoRoute(page: PrivacyPolicyRoute.page),
     
     
   ];

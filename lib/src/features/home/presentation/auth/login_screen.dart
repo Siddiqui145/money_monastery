@@ -26,8 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (!mounted) return;
           
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Logged in Successfully!")));
-          context.router.replace(const HomeRoute());
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Logged in Successfully!"),
+          backgroundColor: Colors.green,));
+          context.router.replaceAll([const HomeRoute()]);
       } on FirebaseAuthException
       catch(e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
